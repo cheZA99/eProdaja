@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eProdaja.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,10 @@ namespace eProdaja
             services.AddControllers();
 
             services.AddSwaggerGen();
+            //povezovanje interface s servisom
+            services.AddTransient<IProizvodService, ProizvodService>();//zive dok traje request, tj svali prolaz kroz ctor dobija novu instancu 
+            //AddScoped- dok je je http request ziv, ako se radi o dva korinsika dobiju 2 instance ctora
+            //services.AddSingleton<>//dok je ziva apk, i on ce raditi, za sve requeste ista je instanca
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

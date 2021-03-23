@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using eProdaja.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,50 +11,38 @@ namespace eProdaja.Controllers
     [Route("[controller]")]//
     public class ProizvodController : ControllerBase
     {
-        private static List<Proizvod> proizvodi;
-
-        static ProizvodController()
+        //paziti da interface bude public
+        public IProizvodService _proizvodService { get; set; }
+        
+        public ProizvodController(IProizvodService proizvodService)
         {
-            proizvodi = new List<Proizvod>()
-           {
-               new Proizvod
-               {
-                   Id= 1,
-                   Name="Lapotop"
-               },
-                new Proizvod
-                {
-                    Id = 2,
-                    Name = "Mis"
-                },
-            };
+            //ovde dobije konkretnu instancu (addtransient)
+            _proizvodService = proizvodService;
         }
+
         [HttpGet]
         public IEnumerable<Proizvod> Get()
         {
-            return proizvodi;
+            return _proizvodService.Get();
         }
-        [HttpGet(template: "{id}")]//vraca uneseni proizvod
+
+        [HttpGet(template: "{id}")]
         public Proizvod GetById(int id)
         {
-            return proizvodi.FirstOrDefault(x => x.Id == id);
+            return _proizvodService.GetById(id);
         }
 
         [HttpPost]
-
         public Proizvod Insert(Proizvod proizvod)
         {
-            proizvodi.Add(proizvod);
-            return proizvod;
+            return _proizvodService.Insert(proizvod);
         }
 
         [HttpPut(template: "{id}")]//update za uneseni proizvod
 
         public Proizvod Update(int id, Proizvod proizvod)
         {
-            var current = proizvodi.FirstOrDefault(x => x.Id == id);
-            current.Name = proizvod.Name;
-            return current;
+            return _proizvodService.Update(id,proizvod);
         }
     }
 

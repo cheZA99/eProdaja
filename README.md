@@ -1,2 +1,3 @@
 # eProdaja
-Vjezbe iz predmeta - Razvoj softvera II 
+
+Projekat sa vjezbi Razvoj softvera II
