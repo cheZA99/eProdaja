@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eProdaja.Database;
+using eProdaja.FIlters;
 using eProdaja.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,13 +29,24 @@ namespace eProdaja
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddControllers(x =>
+            {
+                x.Filters.Add<ErrorFilter>();
+            });
 
             services.AddSwaggerGen();
             //povezovanje interface s servisom
-            services.AddTransient<IProizvodService, ProizvodService>();//zive dok traje request, tj svali prolaz kroz ctor dobija novu instancu 
+            services.AddScoped<IProizvodService, ProizvodService>();//zive dok traje request, tj svali prolaz kroz ctor dobija novu instancu 
+            services.AddScoped<IKorisniciService, KorisniciService>();//zive dok traje request, tj svali prolaz kroz ctor dobija novu instancu 
+
             //AddScoped- dok je je http request ziv, ako se radi o dva korinsika dobiju 2 instance ctora
             //services.AddSingleton<>//dok je ziva apk, i on ce raditi, za sve requeste ista je instanca
+
+            //dodajemo context koji se nalazi u databse folder.
+            //putanja do baze tj. DefaultConnection nam se nalazi u appsettings file-u.
+            services.AddDbContext<eProdajaContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

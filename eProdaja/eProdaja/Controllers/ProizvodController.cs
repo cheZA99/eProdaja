@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace eProdaja.Controllers
 {
     [ApiController]//meta atribut od .NET-a, koji govori serveru da ova klasa moze da uroavlja requestovima
-    [Route("[controller]")]//
+    [Route("[controller]")]//na koji nacin cemo izvrisiti neku metodu, tj ruta
     public class ProizvodController : ControllerBase
     {
         //paziti da interface bude public
