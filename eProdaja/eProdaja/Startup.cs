@@ -38,7 +38,12 @@ namespace eProdaja
             services.AddSwaggerGen();
             //povezovanje interface s servisom
             services.AddScoped<IProizvodService, ProizvodService>();//zive dok traje request, tj svali prolaz kroz ctor dobija novu instancu 
-            services.AddScoped<IKorisniciService, KorisniciService>();//zive dok traje request, tj svali prolaz kroz ctor dobija novu instancu 
+            services.AddScoped<IKorisniciService, KorisniciService>();
+            services.AddScoped<IJedinicaMjereService, JedinicaMjereService>();
+            services.AddScoped<IVrsteProizvodaService, VrsteProizvodaService>();
+            services.AddScoped<IProizvodiService, ProizvodiService>();
+
+
 
             //AddScoped- dok je je http request ziv, ako se radi o dva korinsika dobiju 2 instance ctora
             //services.AddSingleton<>//dok je ziva apk, i on ce raditi, za sve requeste ista je instanca
